@@ -87,7 +87,7 @@ const BannerComponent = ({ bannerItem, chapterItem, authorItem }) =>
             <List.Item>
               <Typography.Text style={{ cursor: "pointer" }}>
                 <PlayArrowIcon />
-              </Typography.Text>{" "}
+              </Typography.Text>
               {item1}
             </List.Item>
           )}

@@ -2,47 +2,51 @@
 
 import React, { useEffect, useState, useRef } from "react";
 import { Avatar, Button, Slider, Space } from "antd";
-import { PlayCircleFilled } from "@mui/icons-material";
+import { PauseCircleFilled, PlayCircleFilled } from "@mui/icons-material";
 import { useSelector } from "react-redux";
 import { audioSelector } from "../redux/reducers/audioReducer";
 import TitleComponent from "./TitleComponent";
-import { audios } from '../datas/audios'
+import { audios } from "../datas/audios";
+import { authors } from "../datas/authors";
 
-function PlayerControllerComponent()
-{
-
-  const audio = useSelector(audioSelector)
+function PlayerControllerComponent() {
+  const audio = useSelector(audioSelector);
   const [chaps, setChaps] = useState([]);
   const [index, setIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const playerRef = useRef();
 
-
-  const playerRef = useRef()
-
-
-  useEffect(() =>
-  {
+  useEffect(() => {
     // console.log('audio')
     // console.log(audio)
 
     if (audio) {
-      getAllChapters()
+      getAllChapters();
     }
+  }, [audio]);
 
-  }, [audio])
+  const getAllChapters = () => {
+    const id = audio.chapsId;
 
-
-  const getAllChapters = () =>
-  {
-    const id = audio.chapsId
-
-    const res = audios.find(element => element.key === id)
+    const res = audios.find((element) => element.key === id);
 
     if (res) {
-      setChaps(res.chaps)
+      setChaps(res.chaps);
+      setIsPlaying(false);
     }
-  }
+  };
 
   // console.log(audio)
+  const author = authors.find((author) => author.key === audio.authorId);
+
+  const togglePlay = () => {
+    if (isPlaying) {
+      playerRef.current.pause();
+    } else {
+      playerRef.current.play();
+    }
+    setIsPlaying(!isPlaying); // Đảo ngược trạng thái phát/nghỉ
+  };
 
   return audio ? (
     <div className="player-controler text-light">
@@ -51,25 +55,15 @@ function PlayerControllerComponent()
           <Space>
             <Avatar src={audio.image} size={60} />
             <div>
-              <TitleComponent text={audio.title} size={18} color={'#fff'} />
-              <p>{audio.authorId}</p>
+              <TitleComponent text={audio.title} size={18} color={"#fff"} />
+              <p>Tác giả: <span style={{fontWeight:"bold"}}>{author ? author.name : ""}</span></p>
             </div>
           </Space>
         </div>
         <div className="col text-center">
           <div>
             <Space>
-              <Button onClick={() => playerRef.current.play()}
-                type="text"
-                icon={
-                  <PlayCircleFilled
-                    style={{
-                      fontSize: 32,
-                      color: "white",
-                    }}
-                  />
-                }
-              />
+            <Button onClick={togglePlay} type="text" icon={isPlaying ? <PauseCircleFilled style={{ fontSize: 32, color: "white" }} /> : <PlayCircleFilled style={{ fontSize: 32, color: "white" }} />} />
             </Space>
           </div>
 
@@ -89,9 +83,15 @@ function PlayerControllerComponent()
         </div>
         <div className="col text-right">sound control</div>
       </div>
-      <audio autoPlay ref={playerRef} src={chaps[index] ? chaps[index].audio : ''} />
+      <audio
+        autoPlay
+        ref={playerRef}
+        src={chaps[index] ? chaps[index].audio : ""}
+      />
     </div>
-  ) : <></>
+  ) : (
+    <></>
+  );
 }
 
 export default PlayerControllerComponent;

@@ -17,19 +17,19 @@ function BrowseAll({ title, data, url }) {
         }}
       >
         <div className="col mb-5">
-          <Link to="/top-chart">
+          <Link to="/top-chart" style={{textDecoration: "none" }}>
             <TitleComponent text={title} size={20} />
           </Link>
         </div>
         <div className="col text-right">
-          <Link to="/top-chart">See more</Link>
+          <Link to="/top-chart" style={{textDecoration: "none" }}>See more</Link>
         </div>
       </div>
 
       <Row gutter={[16, 16]}>
         {data.map((item) => (
           <Col key={item.key} xs={24} sm={12} md={8} lg={6}>
-            <Link to={`/product/${item.key}`}>
+            <Link to={`/product/${item.key}` } style={{textDecoration: "none" }}>
               <Card
                 onClick={() => handleClick(item.key)}
                 cover={

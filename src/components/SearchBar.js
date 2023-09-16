@@ -11,12 +11,12 @@ const suffix = (
   />
 );
 
-function SearchBar({ onSearch, searchVisible }) {
+function SearchBar({ onSearch }) {
   return (
     <Space.Compact
       onSearch={onSearch}
       size="large"
-      style={{ width: "150%", display: searchVisible ? "flex" : "none" }}
+      style={{ width: "150%" }}
     >
       <Input addonBefore={suffix} placeholder="" />
     </Space.Compact>
